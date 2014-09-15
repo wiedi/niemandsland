@@ -7,6 +7,7 @@ var bloem   = require('bloem')
 var niuri   = require('niuri')
 var express = require('express')
 var byline  = require('byline')
+var mdns    = require('mdns')
 var util    = require('../lib/util')
     
 var index = {}
@@ -56,13 +57,18 @@ function main(options) {
 			res.status(404).send('not found')
 			return
 		}
-		res.sendFile(index[hash], {root: options.root})
+		res.sendFile(index[hash], {root: options.root, dotfiles: 'allow'})
 	})
 	
 	loadIndex(options.args[0], function() {
 		console.log('Index loaded')
 	})
 	app.listen(options.port)
+	
+	if(!options.no_mdns) {
+		var mdns_adv = mdns.createAdvertisement(mdns.tcp('ni'), Number(options.port))
+		mdns_adv.start()
+	}
 }
 
 main(program)

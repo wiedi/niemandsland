@@ -9,7 +9,7 @@ var util    = require('../lib/util')
 program
 	.usage('<index>')
 	.option('-d, --destination [path]', 'save files to this folder [./download/]', './download/')
-	.option('-s, --server [server]', 'add static server(s)')
+	.option('-s, --server [server]', 'add static server(s)', '')
 	.option('-m, --no-mdns', 'disable server lookup via multicast dns')
 	.parse(process.argv)
 
@@ -30,8 +30,12 @@ function loadIndex(filename, cb) {
 }
 
 function main(options) {
+	var servers = []
+	if(options.server) {
+		servers = options.server.split(',')
+	}
 	loadIndex(program.args[0], function(wishlist) {
-		var l = new Loader(wishlist, options.destination, options.server.split(','))
+		var l = new Loader(wishlist, options.destination, servers)
 	})
 }
 

@@ -12,7 +12,7 @@
     "request": "2.34.x",
     "express": "4.8.x",
     "connect": "2.15.x",
-    "mdns": "1.1.x",
+    "mdns": "2.2.x",
     "commander": "2.3.x",
     "byline": "4.1.x",
     "findit": "2.0.x",
