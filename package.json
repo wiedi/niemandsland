@@ -1,0 +1,22 @@
+{
+  "name": "niemandsland",
+  "version": "0.0.1",
+  "bin": {
+    "ni-server": "./bin/ni-server.js",
+    "ni-index":  "./bin/ni-index.js",
+    "ni-get":    "./bin/ni-get.js"
+  },
+  "dependencies": {
+    "bloem": "0.2.x",
+    "async": "0.9.x",
+    "request": "2.34.x",
+    "express": "4.8.x",
+    "connect": "2.15.x",
+    "mdns": "1.1.x",
+    "commander": "2.3.x",
+    "byline": "4.1.x",
+    "findit": "2.0.x",
+    "niuri": "0.0.x",
+    "mkdirp": "0.5.x"
+  }
+}
