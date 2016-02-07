@@ -1,11 +1,10 @@
 #!/usr/bin/env node
 "use strict"
 
-var fs      = require('fs')
-var crypto  = require('crypto')
 var async   = require('async')
 var findit  = require('findit')
 var niuri   = require('niuri')
+var util    = require('../lib/util')
 
 
 function listFiles(folder, cb) {
@@ -20,20 +19,12 @@ function listFiles(folder, cb) {
 }
 
 function iterate(files, cb) {
-	async.eachLimit(files, 1, function(item, cb) {
-		var hash = crypto.createHash('sha256')
-		var file = fs.createReadStream(item)
-
-		//hash.setEncoding('hex')
-		
-		file.pipe(hash, { end: false })
-		file.on('end', function () {
-			hash.end()
-			var h = new niuri.NI('sha-256', hash.read()).format('ni')
+	async.eachLimit(files, 1, function(item, callback) {
+		util.hashFile(item, function(err, hash) {
+			var h = new niuri.NI('sha-256', hash).format('ni')
 			console.log(h + ' ' + item)
-			cb()
+			callback()
 		})
-		
 	}, function(err){
 		if(err) {
 			console.log(err)
@@ -47,7 +38,7 @@ function createIndex(folder) {
 			cb(err)
 			return
 		}
-		
+
 		iterate(files)
 	})
 }

@@ -1,8 +1,6 @@
 #!/usr/bin/env node
 "use strict"
 
-var fs      = require('fs')
-var crypto  = require('crypto')
 var async   = require('async')
 var program = require('commander')
 var Loader  = require('../lib/loader')
@@ -34,20 +32,8 @@ function loadIndex(filename, cb) {
 
 function checkExistingFiles(wishlist, destination, callback) {
 	async.eachLimit(wishlist.paths(), 1, function(item, cb) {
-		var hash = crypto.createHash('sha256')
-		var file = fs.createReadStream(destination + '/' + item)
-
-		file.on("error", function() {
-			cb()
-		})
-		file.pipe(hash, { end: false })
-		file.on('end', function () {
-			hash.end()
-
-			var local_hash = hash.read().toString('hex')
-			var index_hash = wishlist.byPath(item)
-
-			if(local_hash === index_hash) {
+		util.hashFile(destination + '/' + item, function(err, hash) {
+			if(hash === wishlist.byPath(item)) {
 				wishlist.removePath(item)
 			}
 
@@ -68,8 +54,8 @@ function main(options) {
 		servers = options.server.split(',')
 	}
 	loadIndex(program.args[0], function(wishlist) {
-		checkExistingFiles(wishlist, options.destination, function(bla) {
-			var l = new Loader(bla, options.destination, servers)
+		checkExistingFiles(wishlist, options.destination, function(list) {
+			var l = new Loader(list, options.destination, servers)
 		})
 	})
 }
