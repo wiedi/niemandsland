@@ -1,6 +1,6 @@
 {
   "name": "niemandsland",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "author":      "Sebastian Wiedenroth <wiedi@frubar.net>",
   "description": "share files identified by NI-URIs",
   "bin": {
